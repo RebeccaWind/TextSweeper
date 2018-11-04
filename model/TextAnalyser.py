@@ -63,6 +63,14 @@ class TextAnalyser:
         self.footer_idx = list(sorted(set(idx)))
 
     def fix_hyphenated(self):
+        '''
+        Identifies occurrences where words are hyphenated across linebreaks.
+        Saves the indices of the first part and the second part of the word in the hyphen_idx list, along with the
+        fixed word entry if that word can be found in the reference dictionary, or the two word parts connected by a
+        hyphen if the word without hyphen cannot be found on the reference dictionary.
+        One list entry is added for each sentence within sents_list; the entries of hyphen_ids that correspond to
+        those sentences that do not contain any hyphenation across line breaks are left empty.
+        '''
         for i,s in enumerate(self.sents_list):
             sent = []
             if i not in self.footer_idx:
@@ -77,7 +85,10 @@ class TextAnalyser:
             self.hyphen_idx.append(sent)
 
     def fix_newlines_in_sentences(self):
-        #check if index in hyphen liste
+        '''
+        Finds all newlines within sentences and saves their indices in newlines_idx list.
+        Skips lines if they are already included in the hyphen_idx list.
+        '''
         k = 0
         for i,s in enumerate(self.sents_list):
             sent = []

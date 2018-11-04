@@ -28,7 +28,7 @@ class Window(Frame):
         self.pack(fill=BOTH, expand=1)
         # add a vertical padding of 10px to the first row
         self.rowconfigure(0, pad=10)
-        #  add a vertical padding 3px to the other rows
+        # add a vertical padding 3px to the other rows
         for x in range(7):
             self.rowconfigure(x + 1, pad=3)
         # initialise text label with welcome message
