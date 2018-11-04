@@ -52,11 +52,12 @@ class TextSplitter:
         skip = False
         # Any entries that have mistakenly been cut at one of the following abbreviations but actually make up one
         # sentence with the next entry in the list are added back together here.
+        non_sentence_endings = ["e.g. ","e.g.,","et al. ","et al.,","etal.,","etc. ","i.e. ","i.e.,"]
         for i,s in enumerate(sents_newlines):
             if skip:
                 skip = False
             else:
-                if s.endswith("e.g. ") or s.endswith("et al. ") or s.endswith("etc. ") or s.endswith("i.e. "):
+                if any([s.endswith(non_ending) for non_ending in non_sentence_endings]):
                     fixed_sents.append(s+sents_newlines[i+1])
                     skip = True
                 else:
