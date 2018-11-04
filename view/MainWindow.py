@@ -19,7 +19,6 @@ class Window(Frame):
         self.master = master
         #call init_window() to show the initial ui window
         self.init_start_window()
-        self.timer_id = None
 
     def init_start_window(self):
         # set the title of the master widget
@@ -49,7 +48,7 @@ class Window(Frame):
         # remove the start button from the ui
         self.start_button.destroy()
         # set a new text to the text label
-        self.start_label.config(text="Wait till dictionaries have loaded...")
+        self.start_label.config(text="Please wait till dictionaries have loaded...")
         self.start_label.update()
         # call load_dicts() from the controller class
         self.controller.load_dicts()
@@ -92,7 +91,7 @@ class Window(Frame):
         self.searchbox.selection_range(0, tk.END)
         self.searchbox.insert(0, f_n)
 
-    def init_clean_up_step(self, text):  # s
+    def init_clean_up_step(self, text):
         # remove existing elements
         self.searchbox.destroy()
         self.browse_button.destroy()
