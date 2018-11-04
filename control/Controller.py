@@ -15,7 +15,7 @@ import os
 class Controller():
     '''
     The controller class manages the exchange of information between the model and the view.
-    any process within these two packages and within the program is executed by the controller.
+    Any process within these two packages and within the program is executed by the controller.
     '''
     def __init__(self):
         self.dicts = None
@@ -85,15 +85,6 @@ class Controller():
         self.markup = Markup.Markup(self.analyser)
         self.markup.markup_all()
 
-    # def process_all_files(self):
-    #     self.load_dicts()
-    #     path = r'D:\Rebecca\Desktop\RebeccaWind'
-    #     files = os.listdir(path)
-    #     for file in files:
-    #         if file.endswith(r'.txt'):
-    #             self.filename = path+'\\'+file
-    #             self.try_process_file()
-
     def process_clean_up(self, causes):
         '''
         Clean the text according to the user input regarding which causes should be cleaned
@@ -110,7 +101,6 @@ class Controller():
         :param output_filename: String that contains the full path of where to save the output text.
         '''
         FW.FileWriter(output_filename,self.output_text)
-
 
 if __name__ == "__main__":
     my_controller = Controller()
