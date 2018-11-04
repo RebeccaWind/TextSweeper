@@ -18,8 +18,9 @@ class Dicts:
         else:
             self.fd = pickle.load(open(f_dist, 'rb'))
 
-        if c_f_d == 'default':
-            self.cfd = pickle.load(open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'resources', 'wiki_new_cfd.pkl'), 'rb'))
-        else:
-            self.cfd = pickle.load(open(c_f_d, 'rb'))
+        # CFD is not needed at the current state of the project
+        # if c_f_d == 'default':
+        #     self.cfd = pickle.load(open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'resources', 'wiki_new_cfd.pkl'), 'rb'))
+        # else:
+        #     self.cfd = pickle.load(open(c_f_d, 'rb'))
 
