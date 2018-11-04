@@ -1,5 +1,3 @@
-
-
 class Markup:
     def __init__(self, analyser):
         '''
@@ -33,7 +31,6 @@ class Markup:
         Mark-up will be added according to the the index-lists for each analysis and cleaning step
         as provided by the TextAnalyser.
         '''
-        # mark-up will be
         xml_markup = []
         # Initialise id counter for each case for the attribute @n in the XML markup.
         # Counters are incremented with each successful mark-up addition.
@@ -94,7 +91,7 @@ class Markup:
             # Join all mark-up of one sentence and add it to the xml_markup list
             xml_markup.append("".join(sent))
 
-        # Join all mark-up to one string and save it in the class variable xml_output.
+        # Join all mark-up to one string and save it in xml_output.
         self.xml_output = "".join(xml_markup)
 
 
