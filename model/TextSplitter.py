@@ -52,7 +52,7 @@ class TextSplitter:
         skip = False
         # Any entries that have mistakenly been cut at one of the following abbreviations but actually make up one
         # sentence with the next entry in the list are added back together here.
-        non_sentence_endings = ["e.g. ","e.g.,","et al. ","et al.,","etal.,","etc. ","i.e. ","i.e.,"]
+        non_sentence_endings = ["e.g. ","e.g., ","et al. ","et al., ","etal., ","etc. ","i.e. ","i.e., "]
         for i,s in enumerate(sents_newlines):
             if skip:
                 skip = False
@@ -77,5 +77,3 @@ class TextSplitter:
 
     def split_text(self):
         return self.tokenize_sentences(self.sent_splitter())
-
-
