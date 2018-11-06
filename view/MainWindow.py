@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfile
+from tkinter.scrolledtext import ScrolledText
 
 
 class Window(Frame):
@@ -106,7 +107,7 @@ class Window(Frame):
         self.file_label.config(text="Please choose from the clean up settings on the right and start the clean up")
         self.file_label.update()
 
-        self.text_out = tk.Text(self)
+        self.text_out = ScrolledText(self, wrap='word')
         self.text_out.grid(row=2, column=0, rowspan=7, columnspan=3)
 
         # define radiobutton groups
@@ -117,6 +118,7 @@ class Window(Frame):
         for c in range(len(causes)):
             cause_vars.append(StringVar())
 
+        self.gridframe_list = []
         for x in range(len(causes)):
             cause_vars[x].set("0")
             gridframe = tk.Frame(self)
@@ -125,6 +127,7 @@ class Window(Frame):
                 Radiobutton(gridframe, text=o, variable=cause_vars[x], value=str(i)).pack(side=LEFT)
             gridframe.grid(row=x + 2, column=3, columnspan=1)
             self.variables[causes[x]] = cause_vars[x]
+            self.gridframe_list.append(gridframe)
 
         # set the submit button
         self.clean_up_button = Button(self, text="Clean up", command=self.controller_clean_up)
@@ -135,6 +138,8 @@ class Window(Frame):
     def show_cleaned_text(self,output_text):
         self.gridframe.destroy()
         self.clean_up_button.destroy()
+        for gridframe in self.gridframe_list:
+            gridframe.destroy()
 
         self.start_label.config(text="Result")
         self.start_label.update()
@@ -150,8 +155,68 @@ class Window(Frame):
 
     def display_text(self, text):
         # do the displaying here
-        self.text_out.insert(tk.END, text)
-        self.text_out.see(tk.END)
+
+        # define you tags
+        self.text_out.tag_config("add", foreground="blue")
+        self.text_out.tag_config("del", foreground="red")
+        self.text_out.tag_config("hyphenation", background="light green")
+        self.text_out.tag_config("newline", background="light blue")
+        self.text_out.tag_config("footer", background="light yellow")
+        self.text_out.tag_config("non_sentence", background="light pink")
+
+        # list of all tags
+        tags_list = ["add", "del", "subst"]
+        cause_list = ["hyphenation", "newline", "footer", "non_sentence"]
+
+        active_causes = []
+        active_tags = []
+        while text:
+            # find the first html-tag
+            index = text.find("<")
+            # if there is none display the rest of the text
+            if index == -1:
+                self.text_out.insert(END, text, active_tags)
+                text = ""
+            else:
+                # display the text in front of the html-tag with the currently active style-tags
+                # and remove it from the text
+                self.text_out.insert(END, text[0:index], active_tags)
+                text = text[index:]
+
+                # get the whole html-tag and remove it from the text as well
+                close_index = text.find(">")
+                tag_text = text[0:close_index + 1]
+                text = text[close_index + 1:]
+
+                # check which tag we found
+                found_tag = ""
+                for tag in tags_list:
+                    if tag_text.find(tag) > 0:
+                        found_tag = tag
+
+                # if we found a substitution find out which
+                if found_tag == "subst":
+                    subst = ""
+                    for cause in cause_list:
+                        if tag_text.find(cause) > 0:
+                            subst = cause
+                    if subst:
+                        found_tag = subst
+                        active_causes.append(subst)
+
+                    # if there was no cause to be found it is a closing tag,
+                    # so we get the last found substitution and remove it
+                    else:
+                        found_tag = active_causes.pop()
+
+                # add or delete style-tags respectively
+                if tag_text.find("/") > 0:
+                    active_tags.remove(found_tag)
+                else:
+                    active_tags.append(found_tag)
+
+        # show the text
+        self.text_out.see("1.0")
 
     def reset(self):
         self.controller.filename = None
