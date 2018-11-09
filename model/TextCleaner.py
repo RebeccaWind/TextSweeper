@@ -19,7 +19,7 @@ class TextCleaner:
         or the <del> node, depending on the values in the causes dictionary.
         "0" stands for cleaning, i.e. replace with <add>; "1" stands for dismiss changes, i.e. replace with <del>;
         anything else stands for keeping the markup as it is, therefore nothing gets deleted.
-        :return:
+        :return: string version of the BeautifulSoup object
         '''
         self.soup = BeautifulSoup(self.text, 'html.parser')
         for key,value in self.causes.items():
