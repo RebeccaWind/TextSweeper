@@ -89,7 +89,6 @@ class TextAnalyser:
         Finds all newlines within sentences and saves their indices in newlines_idx list.
         Skips lines if they are already included in the hyphen_idx list.
         '''
-        k = 0
         for i,s in enumerate(self.sents_list):
             sent = []
             for idx,token in enumerate(s):
@@ -100,7 +99,6 @@ class TextAnalyser:
                     sent.append((idx," "))
                 elif re.search("\n{2,}",token) and idx is len(s) - 1:
                     sent.append((idx,"\n\n"))
-
             self.newlines_idx.append(sent)
 
     def analyse_all(self):
@@ -110,20 +108,10 @@ class TextAnalyser:
         self.fix_newlines_in_sentences()
 
     # def check_words(self):
-    #     i = 0
-    #     k = 0
-    #     for s in self.altered_sents:
-    #         for entry in s:
+    #     for s in self.sents_list:
+    #         sent = []
+    #         for i,entry in s:
     #             if any(c.isalpha() for c in entry):
-    #                 if entry.lower() not in self.dicts.fd.keys() and entry not in self.dicts.cfd.keys():
-    #                     self.defect_words.append((entry,i,k))
-    #             k += 1
-    #         i+=1
-    #     print(self.defect_words)
-    #
-    # def fix_words(self):
-    #     for e in self.defect_words:
-    #         return
-
-
-
+    #                 if entry.lower() not in self.dicts.fd.keys() and entry.lower() not in self.dicts.cfd.keys():
+    #                     sent.append((i,entry))
+    #         self.defect_words.append(sent)
