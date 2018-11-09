@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import re
+import html
 
 
 class MarkupCleaner:
@@ -64,6 +65,7 @@ class MarkupCleaner:
         max_tag = max([(len(str(s)),n)for (n,s) in list_texts])[1]
         # join all content from all nodes with the given name
         text = "\n".join([str(entry) for entry in self.soup.find(max_tag)])
+        text = html.escape(text)
         return text
 
     def process_parsing(self):
