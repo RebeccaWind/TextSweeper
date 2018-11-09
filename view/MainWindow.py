@@ -25,19 +25,21 @@ class Window(Frame):
         # set the title of the master widget
         self.master.title("TextSweeper")
         # allow the widget to expand to the full size of the root window
-        self.pack(fill=BOTH, expand=1)
+        self.grid(row=0, column=0)
+        self.master.rowconfigure(0, weight=1)
+        self.master.columnconfigure(0, weight=1)
         # add a vertical padding of 10px to the first row
         self.rowconfigure(0, pad=10)
-        # add a vertical padding 3px to the other rows
+        # add a vertical padding 5px to the other rows
         for x in range(7):
-            self.rowconfigure(x + 1, pad=3)
+            self.rowconfigure(x + 1, pad=5)
         # initialise text label with welcome message
-        self.start_label = tk.Label(self,text = 'Welcome to TextSweeper!\nPress "Start" to load the default dictionaries and get started.')
-        self.start_label.config(font=("Times", 12))
+        self.start_label = tk.Label(self, text='Welcome to TextSweeper!\nPress "Start" to load the default dictionaries and get started.')
+        self.start_label.config(font=("Times", 16))
         self.start_label.grid(row=0, column=0, columnspan=6)
         # create a button instance
         # once the start button is pressed, the function load_dicts() is called
-        self.start_button = Button(self, text="Start", command=self.load_dicts)
+        self.start_button = Button(self, text="Start", command=self.load_dicts, height=2, width=30, font=("Times", 15))
         # placing the button on my window
         self.start_button.grid(row=2, column=2, columnspan=2)
 
@@ -59,31 +61,31 @@ class Window(Frame):
         self.init_load_button()
 
     def init_load_button(self):
-        self.file_label = tk.Label(self,text='Please select the file to be processed:')
-        self.file_label.config(font=("Times", 11))
+        self.file_label = tk.Label(self, text='Please select the file to be processed:')
+        self.file_label.config(font=("Times", 15))
         self.file_label.grid(row=1, column=0, columnspan=6)
 
-        self.searchbox = tk.Entry(self)
-        self.searchbox.grid(row=2, column=1, columnspan=3)
+        self.searchbox = tk.Entry(self, width=50, font=("Times", 13))
+        self.searchbox.grid(row=2, column=1, columnspan=4, sticky=W, padx=5)
 
-        self.browse_button = Button(self, text="Browse", command=self.select_file, width=10)
-        self.browse_button.grid(row=2, column=4)
+        self.browse_button = Button(self, text="Browse", command=self.select_file, width=10, font=("Times", 13))
+        self.browse_button.grid(row=2, column=5, sticky=E)
 
         self.gridframe = tk.Frame(self)
-        options = ["html","xml","no markup","unknown"]
-        Label(self.gridframe, text="mark-up type:", font=("Times", 11)).pack(side=LEFT)
+        options = ["html", "xml", "no markup", "unknown"]
+        Label(self.gridframe, text="mark-up type:", font=("Times", 13)).pack(side=LEFT)
         # needs to be class variable because otherwise radio buttons will not work properly
         self.mark_up_type = StringVar()
         self.mark_up_type.set("0")
         for i, o in enumerate(options):
-            Radiobutton(self.gridframe, text=o, variable=self.mark_up_type, value=str(i)).pack(side=LEFT)
-        self.gridframe.grid(row=3, column=1, columnspan=4)
+            Radiobutton(self.gridframe, text=o, variable=self.mark_up_type, value=str(i), font=("Times", 13)).pack(side=LEFT)
+        self.gridframe.grid(row=3, column=1, columnspan=4, sticky=W)
 
-        self.process_button = tk.Button(self, text="Process file", command=self.controller.start_processing)
-        self.process_button.grid(row=4, column=0, columnspan=6)
+        self.process_button = tk.Button(self, text="Process file", command=self.controller.start_processing, width=20, height=2, font=("Times", 13))
+        self.process_button.grid(row=4, column=4, rowspan=2, columnspan=2, sticky=E)
 
-        self.reset_button = tk.Button(self, text="Reset", command=self.reset)
-        self.reset_button.grid(row=5, column=0, columnspan=6)
+        self.reset_button = tk.Button(self, text="Restart", command=self.restart, font=("Times", 13))
+        self.reset_button.grid(row=5, column=0, columnspan=2, sticky=W)
 
     def select_file(self):
         f_n = askopenfilename(title="Select a file:",filetypes=(("Text files","*.txt"),("HTML files","*.html;*.htm"),("XML files",".xml")))
@@ -125,12 +127,12 @@ class Window(Frame):
             Label(gridframe, text=causes[x], font=("Courier", 12)).pack(side=LEFT)
             for i,o in enumerate(options):
                 Radiobutton(gridframe, text=o, variable=cause_vars[x], value=str(i)).pack(side=LEFT)
-            gridframe.grid(row=x + 2, column=3, columnspan=1)
+            gridframe.grid(row=x + 2, column=3, columnspan=1, sticky=E)
             self.variables[causes[x]] = cause_vars[x]
             self.gridframe_list.append(gridframe)
 
         # set the submit button
-        self.clean_up_button = Button(self, text="clean up", command=self.controller_clean_up)
+        self.clean_up_button = Button(self, text="Clean", command=self.controller_clean_up)
         self.clean_up_button.grid(row=8, column=3)
 
         self.display_text(text)
@@ -147,8 +149,11 @@ class Window(Frame):
         self.file_label.config(text="This is your cleaned text.")
         self.file_label.update()
 
-        self.save_button = Button(self,text = "save text to file", command=self.controller_save)
-        self.save_button.grid(row=8, column=3)
+        self.save_button = Button(self,text = "save text to file", command=self.controller_save, width=20, height=2, font=("Times", 14))
+        self.save_button.grid(row=7, column=3)
+
+        self.restart_button = Button(self, text="restart", command=self.restart, width=15, height=1, font=("Times", 12))
+        self.restart_button.grid(row=8, column=3, sticky=S+E)
 
         self.text_out.delete('1.0',END)
         self.display_text(output_text)
@@ -178,6 +183,18 @@ class Window(Frame):
                 self.text_out.insert(END, text, active_tags)
                 text = ""
             else:
+                # if it's not one of the tags, continue
+                test = text[index:index+7]
+                ok = False
+                for tag in tags_list:
+                    if test.find(tag) > 0:
+                        ok = True
+                if not ok:
+                    # add 1 to the index, to get the "<" as well
+                    self.text_out.insert(END, text[0:index+1], active_tags)
+                    text = text[index+1:]
+                    continue
+
                 # display the text in front of the html-tag with the currently active style-tags
                 # and remove it from the text
                 self.text_out.insert(END, text[0:index], active_tags)
@@ -219,21 +236,15 @@ class Window(Frame):
         # show the text
         self.text_out.see("1.0")
 
-    def reset(self):
-        self.controller.filename = None
-        self.controller.raw_text = None
-        self.controller.text = None
-        self.controller.checker = None
-        self.controller.orig_sents = None
-        self.controller.cleaner = None
-        self.searchbox.delete(0, 'end')
+    def restart(self):
+        self.controller.restart()
 
     def controller_clean_up(self):
         self.controller.process_clean_up(self.variables)
 
     def controller_save(self):
         output_filename = asksaveasfile(mode='w', defaultextension=".txt")
-        if output_filename is None:  #TODO # asksaveasfile return `None` if dialog closed with "cancel".
+        if output_filename is None:
             return
         else:
             self.controller.write_to_file(output_filename.name)

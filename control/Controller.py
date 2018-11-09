@@ -28,21 +28,37 @@ class Controller():
         self.mark_up_type = None
         self.markup = None
         self.output_text = None
+        self.cleaner = None
 
     def start(self):
         '''
         This function initialises the TK interface, sets the window size and starts the interface display.
         '''
-        root = tk.Tk()
-        root.geometry("1024x576")
-        self.app = MainWindow.Window(controller=self, master=root)
+        self.root = tk.Tk()
+        self.root.geometry("1024x576")
+        self.app = MainWindow.Window(controller=self, master=self.root)
         self.app.mainloop()
+
+    def restart(self):
+        self.filename = None
+        self.raw_text = None
+        self.text = None
+        self.splitter = None
+        self.orig_sents = None
+        self.analyser = None
+        self.mark_up_type = None
+        self.markup = None
+        self.output_text = None
+        self.cleaner = None
+        self.root.destroy()
+        self.start()
 
     def load_dicts(self):
         '''
         Loads the reference dictionaries. Currently, only the default dictionaries are available.
         '''
-        self.dicts = Dicts.Dicts(f_dist='default', c_f_d='default')
+        if self.dicts is None:
+            self.dicts = Dicts.Dicts(f_dist='default', c_f_d='default')
 
     def start_processing(self):
         '''
