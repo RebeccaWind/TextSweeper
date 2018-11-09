@@ -111,7 +111,7 @@ class Window(Frame):
         self.text_out.grid(row=2, column=0, rowspan=7, columnspan=3)
 
         # define radiobutton groups
-        causes = ["hyphenation","newline","footer","non_sentence"]
+        causes = ["hyphenation","newline","footer","non-sentence"]
         options = ["clean","discard","keep markup"]
         cause_vars = []
         self.variables = {}
@@ -130,7 +130,7 @@ class Window(Frame):
             self.gridframe_list.append(gridframe)
 
         # set the submit button
-        self.clean_up_button = Button(self, text="Clean up", command=self.controller_clean_up)
+        self.clean_up_button = Button(self, text="clean up", command=self.controller_clean_up)
         self.clean_up_button.grid(row=8, column=3)
 
         self.display_text(text)
@@ -207,7 +207,8 @@ class Window(Frame):
                     # if there was no cause to be found it is a closing tag,
                     # so we get the last found substitution and remove it
                     else:
-                        found_tag = active_causes.pop()
+                        if active_causes:
+                            found_tag = active_causes.pop()
 
                 # add or delete style-tags respectively
                 if tag_text.find("/") > 0:
