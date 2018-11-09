@@ -19,7 +19,7 @@ class Markup:
         :param old_entry: entry to be changed/deleted
         :param new_entry: entry to be added instead of the deleted one
         :param cause: cause of the substitution; currently one of the following four:
-                        "hyphenation","newline","footer","non_sentence"
+                        "hyphenation","newline","footer","non-sentence"
         :return: string that contains the marked-up entry
         '''
         markup = "<subst @n=%s @cause=%s><del>%s</del><add>%s</add></subst>" %(number,cause,old_entry,new_entry)
@@ -49,10 +49,10 @@ class Markup:
 
             # mark-up for footers and non-sentences is added per sentence
             if i in self.footer:
-                sent.extend("<subst @n=%s @cause=%s><del>" % ("f" + str(footer_xml_id), "footer",))
+                sent.extend("<subst @n=%s @cause=%s><del>" % ("f" + str(footer_xml_id), "footer"))
                 footer_xml_id += 1
             elif i in self.non_sentences:
-                sent.extend("<subst @n=%s @cause=%s><del>" % ("s" + str(non_sentence_xml_id), "non_sentence",))
+                sent.extend("<subst @n=%s @cause=%s><del>" % ("s" + str(non_sentence_xml_id), "non-sentence"))
                 non_sentence_xml_id += 1
             elif hyphen_line is [] and newline_line is []:
                 sent.extend(s)
