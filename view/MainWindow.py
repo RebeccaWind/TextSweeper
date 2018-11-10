@@ -18,6 +18,10 @@ class Window(Frame):
         Frame.__init__(self, master)
         self.controller = controller
         self.master = master
+
+        # define cleaning causes and their display background-colour
+        self.causes = [("hyphenation", "light green"), ("newline", "light blue"), ("footer", "light yellow"), ("non-sentence", "light pink")]
+
         #call init_window() to show the initial ui window
         self.init_start_window()
 
@@ -113,22 +117,21 @@ class Window(Frame):
         self.text_out.grid(row=2, column=0, rowspan=7, columnspan=3)
 
         # define radiobutton groups
-        causes = ["hyphenation","newline","footer","non-sentence"]
         options = ["clean","discard","keep markup"]
         cause_vars = []
         self.variables = {}
-        for c in range(len(causes)):
+        for c in range(len(self.causes)):
             cause_vars.append(StringVar())
 
         self.gridframe_list = []
-        for x in range(len(causes)):
+        for x in range(len(self.causes)):
             cause_vars[x].set("0")
             gridframe = tk.Frame(self)
-            Label(gridframe, text=causes[x], font=("Courier", 12)).pack(side=LEFT)
+            Label(gridframe, text=self.causes[x][0], background=self.causes[x][1] , font=("Courier", 12)).pack(side=LEFT)
             for i,o in enumerate(options):
                 Radiobutton(gridframe, text=o, variable=cause_vars[x], value=str(i)).pack(side=LEFT)
             gridframe.grid(row=x + 2, column=3, columnspan=1, sticky=E)
-            self.variables[causes[x]] = cause_vars[x]
+            self.variables[self.causes[x][0]] = cause_vars[x]
             self.gridframe_list.append(gridframe)
 
         # set the submit button
@@ -164,14 +167,11 @@ class Window(Frame):
         # define you tags
         self.text_out.tag_config("add", foreground="blue")
         self.text_out.tag_config("del", foreground="red")
-        self.text_out.tag_config("hyphenation", background="light green")
-        self.text_out.tag_config("newline", background="light blue")
-        self.text_out.tag_config("footer", background="light yellow")
-        self.text_out.tag_config("non_sentence", background="light pink")
+        for cause,style in self.causes:
+            self.text_out.tag_config(cause, background=style)
 
         # list of all tags
         tags_list = ["add", "del", "subst"]
-        cause_list = ["hyphenation", "newline", "footer", "non_sentence"]
 
         active_causes = []
         active_tags = []
@@ -214,7 +214,7 @@ class Window(Frame):
                 # if we found a substitution find out which
                 if found_tag == "subst":
                     subst = ""
-                    for cause in cause_list:
+                    for cause, style in self.causes:
                         if tag_text.find(cause) > 0:
                             subst = cause
                     if subst:
