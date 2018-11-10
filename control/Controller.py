@@ -9,7 +9,6 @@ from model import TextAnalyser as TA
 from model import TextCleaner as TC
 from model import FileWriter as FW
 from view import MainWindow
-import os
 
 
 class Controller():
