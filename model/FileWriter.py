@@ -6,5 +6,5 @@ class FileWriter:
         :param text:  text to be saved
         '''
         self.out_filename = filename
-        with open(self.out_filename, "w") as output:
+        with open(self.out_filename, "w", encoding="utf8") as output:
             output.write(text)
